@@ -84,35 +84,24 @@ class Sudoku:
                if self.cells[i].remove_possible(self.cells[j].value):
                   res = True
 
-   def check_row(self, index):
+   def check_indexes(self, indexes):
       value_exists = [False]*9
-      for i in grid_utils.get_row_indexes(index):
+      for i in indexes:
          val = self.cells[i].value
          if val != 0:
             if value_exists[val-1]:
                return False
             value_exists[val-1] = True
       return True
+
+   def check_row(self, index):
+      return self.check_indexes(grid_utils.get_row_indexes(index))
    
    def check_col(self, index):
-      value_exists = [False]*9
-      for i in grid_utils.get_col_indexes(index):
-         val = self.cells[i].value
-         if val != 0:
-            if value_exists[val-1]:
-               return False
-            value_exists[val-1] = True
-      return True
+      return self.check_indexes(grid_utils.get_col_indexes(index))
    
    def check_square(self, index):
-      value_exists = [False]*9
-      for i in grid_utils.get_square_indexes(index):
-         val = self.cells[i].value
-         if val != 0:
-            if value_exists[val-1]:
-               return False
-            value_exists[val-1] = True
-      return True
+      return self.check_indexes(grid_utils.get_square_indexes(index))
 
    def check_cell(self, index):
       return self.check_row(index) and self.check_col(index) and self.check_square(index)
