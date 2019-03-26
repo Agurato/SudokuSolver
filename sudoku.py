@@ -7,12 +7,16 @@ class Sudoku:
    def __init__(self):
       self.cells = [None]*81
    
-   def load_from_file(self, filename):
+   def load_from_file(self, filename, number=1):
       with open(filename, "r") as f:
-         data = f.read().replace("\n", "").replace("\r", "")
-         if len(data) == 81:
+         data = f.readlines()
+         if number > len(data):
+            raise ValueError(f"There is only {len(data)} grids (n°{number} requested)")
+         line = data[number-1][:-1]
+         print(line)
+         if len(line) == 81:
             values = []
-            for char in data:
+            for char in line:
                value = 0
                try:
                   value = int(char)
@@ -22,6 +26,8 @@ class Sudoku:
                   value = 0
                values.append(value)
             self.set_values(values)
+         else:
+            raise ValueError(f"len(line) = {len(line)}")
    
    def display(self):
       disp = ""
@@ -52,8 +58,8 @@ class Sudoku:
                disp += " "
             if x in [9, 18]:
                disp += " | "
-            cell = self.cells[(y/3)*9 + (x/3)]
-            poss_index = (y%3)*3 + (x%3)
+            cell = self.cells[int(y/3)*9 + int(x/3)]
+            poss_index = int(y%3)*3 + int(x%3)
             if cell.value == 0:
                if cell.possible[poss_index]:
                   disp += " " + str(poss_index+1)
@@ -78,9 +84,7 @@ class Sudoku:
          res = True
          while(res):
             res = False
-            for j in   grid_utils.get_row_indexes(i) \
-                     + grid_utils.get_col_indexes(i) \
-                     + grid_utils.get_square_indexes(i):
+            for j in (a for b in (grid_utils.get_row_indexes(i), grid_utils.get_col_indexes(i), grid_utils.get_square_indexes(i)) for a in b):
                if self.cells[i].remove_possible(self.cells[j].value):
                   res = True
 

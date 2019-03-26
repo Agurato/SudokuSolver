@@ -1,7 +1,7 @@
 import math
 
 def get_row_indexes(index, size=9):
-      start = (index / size)*size
+      start = int(index / size)*size
       return range(start, start + size)
    
 def get_col_indexes(index, size=9):
@@ -9,8 +9,8 @@ def get_col_indexes(index, size=9):
 
 def get_square_indexes(index, size=9):
    square_size = int(math.sqrt(size))
-   startx = (index % size)/square_size * square_size
-   starty = (index / size)/square_size * square_size
+   startx = int(int(index % size)/square_size) * square_size
+   starty = int(int(index / size)/square_size) * square_size
    indexes = []
    for x in range(startx, startx + square_size):
       for y in range(starty, starty + square_size):
