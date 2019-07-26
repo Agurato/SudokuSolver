@@ -1,3 +1,4 @@
+import copy
 import os
 import sys
 import time
@@ -195,7 +196,8 @@ class Sudoku:
          return self.resolve_brute(index + 1)
    
    def resolve_smart(self, index=0, test_val=1):
-      self.display_full()
+      #self.display_full()
+      #self.display()
       # Last cell has been processed
       if index > 80:
          return True
@@ -215,12 +217,14 @@ class Sudoku:
          # If the value is correct
          if self.check_cell(index):
             self.update()
-            #self.display_full()
+            self.display_full()
+            self.display()
+            backup_cells = copy.deepcopy(self.cells)
             # Check next cell
             if self.resolve_smart(index + 1):
                return True
             else:
-               self.reset_possibilities()
+               self.cells = copy.deepcopy(backup_cells)
                return self.resolve_smart(index, test_val + 1)
          # If the value is not correct
          else:
